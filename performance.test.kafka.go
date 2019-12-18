@@ -5,11 +5,14 @@ import (
    "github.com/Shopify/sarama"
    "log"
    "time"
+   "os"
+   "os/signal"
+   "sync"
 )
 
 func main() {
     config := sarama.NewConfig()
-    config.Version = sarama.V2_4_0_0
+    // config.Version = sarama.V2_4_0_0
     config.Producer.Return.Successes = true
     config.Producer.RequiredAcks = sarama.WaitForAll
     // config.Producer.Flush.Frequency = 10 * time.Second
@@ -17,7 +20,7 @@ func main() {
     // config.Producer.Flush.MaxMessages = 1024
     brokerList := []string{"localhost:19092","localhost:29092","localhost:39092"}
     topic := "foo" 
-    producer, err := sarama.NewAsyncProducer(strings.Split(*brokers, ","), config)
+    producer, err := sarama.NewAsyncProducer(brokerList, config)
     if err != nil {
         panic(err)
     }
@@ -67,12 +70,8 @@ ProducerLoop:
             		enqueued++
 
         	case <-signals:
-            		producer.AsyncClose() // Trigger a shutdown of the producer.
+            		producer.Close() // Trigger a shutdown of the producer.
             		break ProducerLoop
-        }
-        if *sleep {
-            // fmt.Println(100 * time.Millisecond)
-            time.Sleep(1 * time.Millisecond)
         }
         counter++
     }
