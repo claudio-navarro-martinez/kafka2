@@ -28,6 +28,5 @@ func main() {
 	b := ByteEncoder("b")
 	c := PasaAint(3)
 
-	fmt.Println(a,b,c,m)
+	fmt.Println(a,b,c,m.c2.Encode())
 }
-

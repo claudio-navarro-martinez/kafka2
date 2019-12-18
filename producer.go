@@ -23,8 +23,8 @@ func main(){
 
 
 type Producer struct {
-   SyncProducer     sarama.SyncProducer
-   AsyncProducer sarama.AsyncProducer
+   SyncProducer     	sarama.SyncProducer
+   AsyncProducer 	sarama.AsyncProducer
 }
 
 func ProduceMessageAsync(producer *Producer, topic string){
